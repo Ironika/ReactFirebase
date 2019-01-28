@@ -163,19 +163,29 @@ code {
 	width: 60px;
     height: 60px;
     border-radius: 100px;
+    margin-left: 10px;
 }
 
 .thread-list > li > .thread-name {
 	margin-left: 70px;
 	position: absolute;
 	top: 30px;
-    left: 15px;
+    left: 20px;
 }
 
 .thread-list > li > .remove {
 	position: absolute;
 	top: 0;
 	right: 5px;
+}
+
+.haveUnreadMsg {
+    padding: 5px;
+    border-radius: 100px;
+    background-color: red;
+    top: 6px;
+    left: -85px;
+    position: absolute;
 }
 
 .thread-active {

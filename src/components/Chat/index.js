@@ -22,7 +22,8 @@ class Chat extends Component {
       url: '',
       thread_name: '',
       thread_multi_url: '',
-      create_thread_error: ''
+      create_thread_error: '',
+      messagesState: []
     };
   }
 
@@ -70,13 +71,15 @@ class Chat extends Component {
 		    	});
 		    }
 
-	      this.setState({
-	        threads: threads.filter(thread => this.isInThread(thread, this.state.user_uid)),
-	        loading: false,
-	      });
-	    }
+		    threads = threads.filter(thread => this.isInThread(thread, this.state.user_uid))
 
+	      this.setState({ threads: threads, loading: false });
+	    }
     });
+
+	  this.props.firebase.messagesState().on('value', snapshot => {
+			this.setState({messagesState : snapshot.val()});
+		});
 
     this.props.firebase.url('affiliates-512.png').getDownloadURL()
   	.then( url => {
@@ -128,6 +131,7 @@ class Chat extends Component {
   	if(this.state.content !== '' && this.state.content !== "\n") {
   		let thread = this.state.thread;
 	  	let date = new Date();
+	  	let uid = (new Date().getTime() + Math.floor((Math.random()*10000)+1)).toString(16);
 
 	  	let msg = {
 	  		content: this.state.content, 
@@ -135,7 +139,8 @@ class Chat extends Component {
 	  		user: {
 	  			uid: this.state.user_uid,
 	  			username: this.getUser(this.state.user_uid).username
-	  		}
+	  		},
+	  		uid: uid
 	    };
 
 	    if(!thread.messages)
@@ -146,6 +151,19 @@ class Chat extends Component {
 	  	this.props.firebase
 	      .messages(this.state.thread.uid)
 	      .set(thread.messages);
+
+	    let msgReads = [];
+	    let read = {};
+	    for(let key in thread.users) {
+	    	if(thread.users[key].uid !== this.state.user_uid) {
+	    		read[thread.users[key].uid] = false;
+	    	} else {
+	    		read[thread.users[key].uid] = true;
+	    	}
+	    	msgReads.push(read);
+	    }
+
+	    this.props.firebase.messagesStateThreadMsg(thread.uid, uid).set(msgReads);
 
 	    this.setState({content: ''})
 	    setTimeout(function(){ 
@@ -170,6 +188,7 @@ class Chat extends Component {
   }
 
   handleClickThread(thread) {
+  	this.msgIsRead(thread)
   	this.setState({thread: thread, formCreateThreadIsOpen: false});
   	setTimeout(function(){ 
   		var scroll = document.getElementById('chat');
@@ -252,26 +271,50 @@ class Chat extends Component {
 	  	this.props.firebase.messages(new_thread.uid).on('value', snapshot => {
     		const messagesObject = snapshot.val();
     		if(messagesObject) {
-    			let thread = new_thread;
-    			thread.messages = messagesObject;
+    			new_thread.messages = messagesObject;
     		}
     	});
-
 	    this.setState({thread: new_thread})
   	}
   }
 
   handleClickRemove(thread_uid) {
   	this.props.firebase.thread(thread_uid).remove();
+  	this.props.firebase.messagesStateThread(thread_uid).remove();
+  }
+
+  msgIsRead(thread) {
+  	let messagesStateThread = this.state.messagesState[thread.uid]
+  	for(let key in messagesStateThread) {
+			for(let key2 in messagesStateThread[key]) {
+					messagesStateThread[key][key2][this.state.user_uid] = true;
+			}
+		}
+
+		this.props.firebase.messagesStateThread(thread.uid).set(messagesStateThread);
+  }
+
+  haveUnreadMsg(thread) {
+  	if(!this.state.messagesState)
+  		return false;
+
+		for(let key in this.state.messagesState[thread.uid]) {
+			for(let key2 in this.state.messagesState[thread.uid][key]) {
+				if(!this.state.messagesState[thread.uid][key][key2][this.state.user_uid]) {
+					 return true;
+				}
+			}
+		}
+		return false;
   }
 
   threadList() {
   	return <ul className="thread-list">
-      {this.state.threads.map(thread => {
+      {this.state.threads && this.state.threads.map(thread => {
         return (
 	        <li key={thread.uid} onClick={this.handleClickThread.bind(this, thread)} className={this.state.thread.uid === thread.uid ? 'thread-active' : ''}>
 	        	<img src={this.getImgThread(thread)} alt='thread url'/>
-	          <span className="thread-name">{thread.name !== '' ? thread.name : this.getThreadName(thread)}</span>
+	          <span className="thread-name">{thread.name !== '' ? thread.name : this.getThreadName(thread)}{this.haveUnreadMsg(thread) && <span className="haveUnreadMsg"></span>}</span>
 	          <span className="remove" onClick={this.handleClickRemove.bind(this, thread.uid)}>x</span>
 	        </li>
 	      )
@@ -297,10 +340,17 @@ class Chat extends Component {
     	this.sendMsg();
   }
 
+  handleScrollChat(e) {
+  	if(this.haveUnreadMsg(this.state.thread))
+	  	if(e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 250))
+	  		this.msgIsRead(this.state.thread);
+  }
+
   chatbox() {
   	return (
       <React.Fragment>
-      	{this.state.thread.users.length > 2 && <ul className="chat-users-list-chat">
+      	{this.state.thread.users.length > 2 && 
+      		<ul className="chat-users-list-chat">
 			    {this.state.thread.users.filter(user => user.uid !== this.state.user_uid).map(user => (
 			      <li key={user.uid}>
 			      	<img src={user.url} alt='user img'/>
@@ -310,7 +360,7 @@ class Chat extends Component {
 			      </li>
 			    ))}
 			  </ul>}
-        <ul className="chat-box" id="chat">
+        <ul className="chat-box" id="chat" onScroll={this.handleScrollChat.bind(this)}>
           {this.state.thread.messages && this.state.thread.messages.map((message, index) => {
           	let date = new Date(message.sended_at);
             return message.user.uid === this.state.user_uid ? 

@@ -61,6 +61,14 @@ class Firebase {
 
   messages = (thread_uid) => this.db.ref(`threads/${thread_uid}/messages`);
 
+  // *** MessagesState API ***
+
+  messagesState = () => this.db.ref('messages_state_read');
+
+  messagesStateThread = (thread_uid) => this.db.ref(`messages_state_read/${thread_uid}`);
+
+  messagesStateThreadMsg = (thread_uid, msg_uid) => this.db.ref(`messages_state_read/${thread_uid}/${msg_uid}`);
+
   // *** Storage API ***
 
   url = imgName => this.storage.ref(`${imgName}`);
