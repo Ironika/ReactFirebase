@@ -323,14 +323,14 @@ code {
     padding: 20px;
     margin: 0;
     width: calc(100% - 40px);
-    height: 210px;
+    height: 340px;
     overflow-y: scroll;
     list-style-type: none;
     background-color: #c5e0ff;
 }
 
 .chat-box-full {
-	height: 430px !important;
+	height: 490px !important;
 }
 
 .chat-box > li > p {
@@ -345,8 +345,8 @@ code {
 
 .showEmojis {
 	position: absolute;
-    bottom: 75px;
-    right: 10px;
+    bottom: 37px;
+    right: 130px;
     cursor: pointer;
 }
 
@@ -368,24 +368,27 @@ code {
 }
 
 textarea {
-	width: 100%;
+	width: calc(90% - 40px);
     height: 25px;
     background-color: white;
     border: none;
     padding: 20px;
-    /*border: 1px solid black;*/
+    float:left;
+    resize: none;
+    outline: none;
 }
 
 .send-msg {
-	padding: 18px;
-    margin-left: 5px;
-    width: 20%;
+	padding: 20px;
+    width: 10%;
+    height: 65px;
     background-color: #c5e0ff;
     text-align: center;
-    margin: auto;
     text-transform: uppercase;
-    display: block;
-    margin-top: 20px;
+    display: inline-block;
+    border: none;
+    border-top: 1px solid white;
+    outline: none;
 }
 
 /* ------------------------- FOOTER ------------------------- */
@@ -396,4 +399,13 @@ footer {
     padding: 20px;
     color: white;
     text-align: right;
+}
+
+@-moz-document url-prefix() {
+    textarea {
+    	height: 24px;
+    }
+    .send-msg {
+    	border-top: 1px solid black !important;
+    }
 }

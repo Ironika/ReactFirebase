@@ -293,13 +293,15 @@ class Chat extends Component {
 
   msgIsRead(thread) {
   	let messagesStateThread = this.state.messagesState[thread.uid]
-  	for(let key in messagesStateThread) {
-			for(let key2 in messagesStateThread[key]) {
-					messagesStateThread[key][key2][this.state.user_uid] = true;
+  	if(messagesStateThread) {
+  		for(let key in messagesStateThread) {
+				for(let key2 in messagesStateThread[key]) {
+						messagesStateThread[key][key2][this.state.user_uid] = true;
+				}
 			}
-		}
 
-		this.props.firebase.messagesStateThread(thread.uid).set(messagesStateThread);
+			this.props.firebase.messagesStateThread(thread.uid).set(messagesStateThread);
+  	}
   }
 
   haveUnreadMsg(thread) {
@@ -364,7 +366,6 @@ class Chat extends Component {
   }
 
   handleEmojiClick(code, emoji) {
-  	console.log(code, emoji)
   	let emojiPic = jsemoji.replace_colons(`:${emoji.name}:`);
   	this.setState({content: this.state.content + emojiPic});
   }
@@ -395,10 +396,12 @@ class Chat extends Component {
             <li key={index}><p><span>{this.state.thread.users.length < 3 ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' - ' + message.user.username}</span><br/><br/>{message.content}</p></li>
           })}
         </ul>
-        <textarea placeholder="Type your text ..." value={this.state.content} onChange={this.change.bind(this, 'content')} onKeyPress={this.handleKeyPress.bind(this)}></textarea>
-        <span className="showEmojis" onClick={this.showEmojis.bind(this)}>{'😎'}</span>
-        {this.state.showEmojis && <EmojiPicker onEmojiClick={this.handleEmojiClick.bind(this)}/>}
-        <button className="send-msg" onClick={this.sendMsg.bind(this)}>send</button>
+        <div style={{width: '100%'}}>
+	        <textarea placeholder="Type your text ..." value={this.state.content} onChange={this.change.bind(this, 'content')} onKeyPress={this.handleKeyPress.bind(this)}></textarea>
+	        <span className="showEmojis" onClick={this.showEmojis.bind(this)}>{'😎'}</span>
+	        {this.state.showEmojis && <EmojiPicker onEmojiClick={this.handleEmojiClick.bind(this)}/>}
+	        <button className="send-msg" onClick={this.sendMsg.bind(this)}>send</button>
+	      </div>
       </React.Fragment>
     )
   }
