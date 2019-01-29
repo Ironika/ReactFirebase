@@ -345,8 +345,8 @@ code {
 
 .showEmojis {
 	position: absolute;
-    bottom: 37px;
-    right: 130px;
+    bottom: 8%;
+    right: 11%;
     cursor: pointer;
 }
 
@@ -379,7 +379,6 @@ textarea {
 }
 
 .send-msg {
-	padding: 20px;
     width: 10%;
     height: 65px;
     background-color: #c5e0ff;
@@ -389,6 +388,26 @@ textarea {
     border: none;
     border-top: 1px solid white;
     outline: none;
+    cursor: pointer;
+}
+
+.send-msg > img {
+	width: 60px;
+    height: 60px;
+}
+
+.uploadFileIcon {
+	position: absolute;
+    width: 20px;
+    right: 13.5%;
+    bottom: 9.5%;
+    cursor: pointer;
+}
+
+.chat-img {
+	width: 200px;
+    object-fit: cover;
+    height: 200px;
 }
 
 /* ------------------------- FOOTER ------------------------- */

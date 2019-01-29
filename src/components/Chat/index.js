@@ -4,6 +4,8 @@ import { withFirebase } from '../Firebase';
 import Select from 'react-select';
 import EmojiPicker from 'emoji-picker-react';
 import JSEMOJI from 'emoji-js';
+import iconSend from '../../assets/img/icon-send.png';
+import iconUpload from '../../assets/img/icon-upload.png';
 
 let jsemoji = new JSEMOJI();
 jsemoji.img_set = 'emojione';
@@ -374,6 +376,33 @@ class Chat extends Component {
   	this.setState({showEmojis: !this.state.showEmojis});
   }
 
+  parseUrl(content) {
+  	let matches, url;
+  	matches = content.match(/\[url\]\S*\[\/url\]/g);
+  	if(matches) {
+	  	for(let key in matches) {
+	  		url = matches[key].replace('[url]', '');
+	  		url = url.replace('[/url]', '');
+	  		content = content.replace(matches[key], '<br/><br/><img class="chat-img" src="' + url + '" alt="content img"/><br/><br/>')
+	  	}
+	  }
+  	return content;
+  }
+
+  handleClickUpload() {
+  	this.refs.fileUploader.click();
+  }
+
+  async handleChangeUpload(e) {
+  	let file = e.target.files[0]
+  	let upload = await this.props.firebase.threadImg(this.state.thread.uid, file.name).put(file);
+
+    this.props.firebase.threadImg(this.state.thread.uid, file.name).getDownloadURL()
+    .then( url => {
+    	this.setState({content: this.state.content + '[url]' + url + '[/url]'});
+    });
+  }
+
   chatbox() {
   	return (
       <React.Fragment>
@@ -392,15 +421,17 @@ class Chat extends Component {
           {this.state.thread.messages && this.state.thread.messages.map((message, index) => {
           	let date = new Date(message.sended_at);
             return message.user.uid === this.state.user_uid ? 
-            <li className="sender" key={index}><p><span>{date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}</span><br/><br/>{message.content}</p></li> : 
-            <li key={index}><p><span>{this.state.thread.users.length < 3 ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' - ' + message.user.username}</span><br/><br/>{message.content}</p></li>
+            <li className="sender" key={index}><p><span>{date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}</span><br/><br/><span dangerouslySetInnerHTML={{__html: this.parseUrl(message.content)}}></span></p></li> : 
+            <li key={index}><p><span>{this.state.thread.users.length < 3 ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' - ' + message.user.username}</span><br/><br/><span dangerouslySetInnerHTML={{__html: this.parseUrl(message.content)}}></span></p></li>
           })}
         </ul>
         <div style={{width: '100%'}}>
 	        <textarea placeholder="Type your text ..." value={this.state.content} onChange={this.change.bind(this, 'content')} onKeyPress={this.handleKeyPress.bind(this)}></textarea>
 	        <span className="showEmojis" onClick={this.showEmojis.bind(this)}>{'😎'}</span>
+	        <img className="uploadFileIcon" onClick={this.handleClickUpload.bind(this)} src={iconUpload} alt='icon upload'/>
+	        <input type='file' hidden id='upload' ref="fileUploader" onChange={this.handleChangeUpload.bind(this)}/>
 	        {this.state.showEmojis && <EmojiPicker onEmojiClick={this.handleEmojiClick.bind(this)}/>}
-	        <button className="send-msg" onClick={this.sendMsg.bind(this)}>send</button>
+	        <button className="send-msg" onClick={this.sendMsg.bind(this)}><img src={iconSend} alt='icon send'/></button>
 	      </div>
       </React.Fragment>
     )

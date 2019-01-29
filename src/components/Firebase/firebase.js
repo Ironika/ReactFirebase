@@ -73,6 +73,8 @@ class Firebase {
   avatar = imgName => this.storage.ref(`avatars/${imgName}`);
 
   avatars = () => this.storage.ref(`avatars`);
+
+  threadImg = (thread_uid, imgName) => this.storage.ref(`threads/${thread_uid}/${imgName}`);
 }
 
 export default Firebase;
