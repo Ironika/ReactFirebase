@@ -147,7 +147,7 @@ code {
 	color: white;
 	text-align: left;
 	margin-top: 15px;
-	overflow: scroll;
+	overflow-y: scroll;
     max-height: 355px;
 }
 
@@ -199,10 +199,25 @@ code {
 	background-color: #c5e0ff;
 }
 
+.userList {
+	position: relative;
+}
+
+.showUserList {
+	color: white;
+	text-decoration: underline;
+	cursor: pointer;
+	position: absolute;
+    right: 10px;
+    text-transform: uppercase;
+    top: -10px;
+    font-size: 12px;
+}
+
 .chat-users-list {
 	list-style-type: none;
 	margin: 0;
-	overflow: scroll;
+	overflow-x: scroll;
 	display: flex;
 	border-bottom: 1px dashed #c5e0ff;
 	padding-left: 0;
@@ -221,15 +236,15 @@ code {
 
 .chat-users-list > li > img {
 	border-radius: 100px;
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	object-fit: cover;
 }
 
 .chat-users-list-chat {
 	list-style-type: none;
 	margin: 0;
-	overflow: scroll;
+	overflow-x: scroll;
 	display: flex;
 	border-bottom: 1px dashed #c5e0ff;
 	padding-left: 0;
@@ -266,7 +281,7 @@ code {
 
 .add-thread {
 	position: relative;
-    right: -90px;
+    left: -85px;
     top: 12px;
     padding: 3px 8px;
     background-color: #c5e0ff;
@@ -301,6 +316,7 @@ code {
 
 .box-right-container {
 	overflow: hidden;
+	position: relative;
 }
 
 .chat-box {
@@ -308,9 +324,13 @@ code {
     margin: 0;
     width: calc(100% - 40px);
     height: 210px;
-    overflow: scroll;
+    overflow-y: scroll;
     list-style-type: none;
     background-color: #c5e0ff;
+}
+
+.chat-box-full {
+	height: 430px !important;
 }
 
 .chat-box > li > p {
@@ -323,13 +343,27 @@ code {
 	white-space: pre-line;
 }
 
+.showEmojis {
+	position: absolute;
+    bottom: 75px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.emoji-picker {
+	position: absolute !important;
+    top: 0;
+    display: inline-block !important;
+    right: 50px;
+}
+
 .sender {
 	text-align: right;
 }
 
 .sender > p {
-	background-color: #bfbeb9 !important;
-	color: white;
+	background-color: #3c3c3c !important;
+	color: white !important;
 	display: inline-block;
 }
 

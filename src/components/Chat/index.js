@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
 import Select from 'react-select';
+import EmojiPicker from 'emoji-picker-react';
+import JSEMOJI from 'emoji-js';
+
+let jsemoji = new JSEMOJI();
+jsemoji.img_set = 'emojione';
+jsemoji.img_sets.emojione.path = 'https://cdn.jsdelivr.net/emojione/assets/3.0/png/32/';
 
 class Chat extends Component {
   constructor(props) {
@@ -23,7 +29,9 @@ class Chat extends Component {
       thread_name: '',
       thread_multi_url: '',
       create_thread_error: '',
-      messagesState: []
+      messagesState: [],
+      showEmojis: false,
+      showUserList: true
     };
   }
 
@@ -165,7 +173,7 @@ class Chat extends Component {
 
 	    this.props.firebase.messagesStateThreadMsg(thread.uid, uid).set(msgReads);
 
-	    this.setState({content: ''})
+	    this.setState({content: '', showEmojis: false})
 	    setTimeout(function(){ 
 	  		var scroll = document.getElementById('chat');
 	  		scroll.scrollTop = scroll.scrollHeight;
@@ -322,17 +330,26 @@ class Chat extends Component {
     </ul>
   }
 
+  handleShowUserList() {
+  	this.setState({showUserList: !this.state.showUserList});
+  }
+
   userList() {
-  	return <ul className="chat-users-list">
-		    {this.state.users.filter(user => user.uid !== this.state.user_uid).map(user => (
-		      <li key={user.uid} onClick={this.handleClickTalk.bind(this, user)}>
-		      	<img src={user.url} alt='user img'/>
-		      	<p>
-		          <strong>{user.username}</strong> 
-		        </p>
-		      </li>
-		    ))}
-		  </ul>
+  	return <div className="userList">
+  		<span className="showUserList" onClick={this.handleShowUserList.bind(this)}>{this.state.showUserList ? 'hide' : 'show users'}</span>
+  		{this.state.showUserList && 
+  			<ul className="chat-users-list">
+			    {this.state.users.filter(user => user.uid !== this.state.user_uid).map(user => (
+			      <li key={user.uid} onClick={this.handleClickTalk.bind(this, user)}>
+			      	<img src={user.url} alt='user img'/>
+			      	<p>
+			          <strong>{user.username}</strong> 
+			        </p>
+			      </li>
+			    ))}
+			  </ul>
+			}
+		</div>
   }
 
   handleKeyPress(event) {
@@ -344,6 +361,16 @@ class Chat extends Component {
   	if(this.haveUnreadMsg(this.state.thread))
 	  	if(e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 250))
 	  		this.msgIsRead(this.state.thread);
+  }
+
+  handleEmojiClick(code, emoji) {
+  	console.log(code, emoji)
+  	let emojiPic = jsemoji.replace_colons(`:${emoji.name}:`);
+  	this.setState({content: this.state.content + emojiPic});
+  }
+
+  showEmojis() {
+  	this.setState({showEmojis: !this.state.showEmojis});
   }
 
   chatbox() {
@@ -360,7 +387,7 @@ class Chat extends Component {
 			      </li>
 			    ))}
 			  </ul>}
-        <ul className="chat-box" id="chat" onScroll={this.handleScrollChat.bind(this)}>
+        <ul className={this.state.showUserList ? "chat-box" : "chat-box chat-box-full"} id="chat" onScroll={this.handleScrollChat.bind(this)}>
           {this.state.thread.messages && this.state.thread.messages.map((message, index) => {
           	let date = new Date(message.sended_at);
             return message.user.uid === this.state.user_uid ? 
@@ -368,7 +395,9 @@ class Chat extends Component {
             <li key={index}><p><span>{this.state.thread.users.length < 3 ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' - ' + message.user.username}</span><br/><br/>{message.content}</p></li>
           })}
         </ul>
-        <textarea placeholder="msg..." value={this.state.content} onChange={this.change.bind(this, 'content')} onKeyPress={this.handleKeyPress.bind(this)}></textarea>
+        <textarea placeholder="Type your text ..." value={this.state.content} onChange={this.change.bind(this, 'content')} onKeyPress={this.handleKeyPress.bind(this)}></textarea>
+        <span className="showEmojis" onClick={this.showEmojis.bind(this)}>{'😎'}</span>
+        {this.state.showEmojis && <EmojiPicker onEmojiClick={this.handleEmojiClick.bind(this)}/>}
         <button className="send-msg" onClick={this.sendMsg.bind(this)}>send</button>
       </React.Fragment>
     )
@@ -423,7 +452,7 @@ class Chat extends Component {
         {this.userList()}
         <div className="container">
 	      	<div className="box-left">
-	      		<span className="add-thread" onClick={this.displayFormfCreateThread.bind(this)}>+</span>
+	      		<span className="add-thread" title="add new chat" onClick={this.displayFormfCreateThread.bind(this)}>+</span>
 	      		{loading && <div>Loading Threats...</div>}
 			      {this.threadList()}
 			    </div>
