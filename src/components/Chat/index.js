@@ -363,7 +363,7 @@ class Chat extends Component {
 
   handleScrollChat(e) {
   	if(this.haveUnreadMsg(this.state.thread))
-	  	if(e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 250))
+	  	if(e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 380) || e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 530))
 	  		this.msgIsRead(this.state.thread);
   }
 
