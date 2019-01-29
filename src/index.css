@@ -368,7 +368,7 @@ code {
 }
 
 textarea {
-	width: calc(90% - 40px);
+	width: calc(90% - 90px);
     height: 25px;
     background-color: white;
     border: none;
@@ -376,6 +376,7 @@ textarea {
     float:left;
     resize: none;
     outline: none;
+    padding-right: 70px;
 }
 
 .send-msg {
