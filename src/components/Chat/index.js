@@ -288,9 +288,10 @@ class Chat extends Component {
   	}
   }
 
-  handleClickRemove(thread_uid) {
-  	this.props.firebase.thread(thread_uid).remove();
-  	this.props.firebase.messagesStateThread(thread_uid).remove();
+  async handleClickRemove(thread_uid) {
+  	await this.props.firebase.thread(thread_uid).remove();
+  	await this.props.firebase.messagesStateThread(thread_uid).remove();
+  	this.setState({thread: ''});
   }
 
   msgIsRead(thread) {
@@ -408,15 +409,16 @@ class Chat extends Component {
       <React.Fragment>
       	{this.state.thread.users.length > 2 && 
       		<ul className="chat-users-list-chat">
-			    {this.state.thread.users.filter(user => user.uid !== this.state.user_uid).map(user => (
-			      <li key={user.uid}>
-			      	<img src={user.url} alt='user img'/>
-			      	<p>
-			          <strong>{user.username}</strong> 
-			        </p>
-			      </li>
-			    ))}
-			  </ul>}
+				    {this.state.thread.users.filter(user => user.uid !== this.state.user_uid).map(user => (
+				      <li key={user.uid}>
+				      	<img src={user.url} alt='user img'/>
+				      	<p>
+				          <strong>{user.username}</strong> 
+				        </p>
+				      </li>
+				    ))}
+				  </ul>
+				}
         <ul className={this.state.showUserList ? "chat-box" : "chat-box chat-box-full"} id="chat" onScroll={this.handleScrollChat.bind(this)}>
           {this.state.thread.messages && this.state.thread.messages.map((message, index) => {
           	let date = new Date(message.sended_at);
