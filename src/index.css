@@ -276,12 +276,11 @@ code {
 
 .box-left {
 	width: 15%;
-	text-align: center;
 }
 
 .add-thread {
 	position: relative;
-    left: -85px;
+    left: 4%;
     top: 12px;
     padding: 3px 8px;
     background-color: #c5e0ff;
@@ -357,9 +356,9 @@ code {
 
 .emoji-picker {
 	position: absolute !important;
-    top: 0;
+    top: -340px;
     display: inline-block !important;
-    right: 50px;
+    right: 20px;
 }
 
 .sender {
