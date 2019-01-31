@@ -343,9 +343,14 @@ code {
 	white-space: pre-line;
 }
 
+.send-block {
+	width: 100%;
+	position: relative;
+}
+
 .showEmojis {
 	position: absolute;
-    bottom: 8%;
+    top: -1%;
     right: 11%;
     cursor: pointer;
 }
@@ -401,7 +406,7 @@ textarea {
 	position: absolute;
     width: 20px;
     right: 13.5%;
-    bottom: 9.5%;
+    top: 8%;
     cursor: pointer;
 }
 

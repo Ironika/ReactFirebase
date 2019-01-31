@@ -427,7 +427,7 @@ class Chat extends Component {
             <li key={index}><p><span>{this.state.thread.users.length < 3 ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' - ' + message.user.username}</span><br/><br/><span dangerouslySetInnerHTML={{__html: this.parseUrl(message.content)}}></span></p></li>
           })}
         </ul>
-        <div style={{width: '100%'}}>
+        <div className="send-block">
 	        <textarea placeholder="Type your text ..." value={this.state.content} onChange={this.change.bind(this, 'content')} onKeyPress={this.handleKeyPress.bind(this)}></textarea>
 	        <span className="showEmojis" onClick={this.showEmojis.bind(this)}>{'😎'}</span>
 	        <img className="uploadFileIcon" onClick={this.handleClickUpload.bind(this)} src={iconUpload} alt='icon upload'/>
