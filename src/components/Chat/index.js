@@ -379,14 +379,27 @@ class Chat extends Component {
 
   parseUrl(content) {
   	let matches, url;
+
   	matches = content.match(/\[url\]\S*\[\/url\]/g);
   	if(matches) {
 	  	for(let key in matches) {
 	  		url = matches[key].replace('[url]', '');
 	  		url = url.replace('[/url]', '');
-	  		content = content.replace(matches[key], '<br/><br/><img class="chat-img" src="' + url + '" alt="content img"/><br/><br/>')
+	  		content = content.replace(matches[key], '<br/><br/><img class="chat-img" alt="content img" src="' + url + '"/><br/><br/>')
 	  	}
 	  }
+
+	  matches = content.match(/http\S*/g);
+	  if(matches) {
+	  	for(let key in matches) {
+	  		if(!matches[key].includes('"/>'))
+	  			if(matches[key].includes('.gif') || matches[key].includes('.png') || matches[key].includes('.jpg') || matches[key].includes('.jpeg'))
+	  				content = content.replace(matches[key], '<br/><br/><iframe width="300" height="200" src="' + matches[key] + '"></iframe><br/><br/>')
+	  			else
+	  				content = content.replace(matches[key], '<br/><br/><a target="_blank" href="' + matches[key] + '">' + matches[key] + '</a><br/><br/>')
+	  	}
+	  }
+
   	return content;
   }
 

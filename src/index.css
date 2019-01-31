@@ -22,7 +22,7 @@ code {
 	margin: 10% auto;
 }
 
-.signin > h1, a, p {
+.signin > h1, .signin > a, .signin > p {
 	color: white;
 }
 
@@ -60,7 +60,7 @@ code {
 	margin: 10% auto;
 }
 
-.signup > h1, a, p {
+.signup > h1, .signup > a, .signup > p {
 	color: white;
 }
 
@@ -363,6 +363,10 @@ code {
 
 .sender {
 	text-align: right;
+}
+
+.sender a {
+	color: #c5e0ff;
 }
 
 .sender > p {
