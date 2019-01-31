@@ -22,8 +22,12 @@ code {
 	margin: 10% auto;
 }
 
-.signin > h1, .signin > a, .signin > p {
+.signin > h1, .signin > p {
 	color: white;
+}
+
+.signin > p > a {
+	color: #c5e0ff;
 }
 
 .signin > form {
@@ -60,9 +64,13 @@ code {
 	margin: 10% auto;
 }
 
-.signup > h1, .signup > a, .signup > p {
+.signup > h1, .signup > p {
 	color: white;
 }
+
+ .signup > p > a {
+ 	color: #c5e0ff;
+ }
 
 .signup > form {
 	text-align: left;
