@@ -32,7 +32,7 @@ class AccountPage extends Component {
   }
 
   async uploadFile() {
-  	let upload = await this.props.firebase.avatars().child(this.state.files[0].name).put(this.state.files[0]);
+  	await this.props.firebase.avatars().child(this.state.files[0].name).put(this.state.files[0]);
 
     this.props.firebase.avatar(this.state.files[0].name).getDownloadURL()
     .then( url => {

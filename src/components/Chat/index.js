@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
-import Select from 'react-select';
 import EmojiPicker from 'emoji-picker-react';
 import JSEMOJI from 'emoji-js';
 import iconSend from '../../assets/img/icon-send.png';
 import iconUpload from '../../assets/img/icon-upload.png';
+import UserList from './userList';
+import ThreadList from './threadList';
+import CreateThread from './createThread';
 
 let jsemoji = new JSEMOJI();
 jsemoji.img_set = 'emojione';
@@ -137,6 +139,10 @@ class Chat extends Component {
 	  }
   }
 
+  cancelCreateThread() {
+  	this.setState({formCreateThreadIsOpen: false})
+  }
+
   sendMsg() {
   	if(this.state.content !== '' && this.state.content !== "\n") {
   		let thread = this.state.thread;
@@ -251,7 +257,7 @@ class Chat extends Component {
   	return false;
   }
 
-  handleClickTalk(user) {
+  handleClickUser(user) {
   	let thread = this.getThreadByUser(user)
   	if(thread)
   		this.setState({thread: thread});
@@ -321,40 +327,8 @@ class Chat extends Component {
 		return false;
   }
 
-  threadList() {
-  	return <ul className="thread-list">
-      {this.state.threads && this.state.threads.map(thread => {
-        return (
-	        <li key={thread.uid} onClick={this.handleClickThread.bind(this, thread)} className={this.state.thread.uid === thread.uid ? 'thread-active' : ''}>
-	        	<img src={this.getImgThread(thread)} alt='thread url'/>
-	          <span className="thread-name">{thread.name !== '' ? thread.name : this.getThreadName(thread)}{this.haveUnreadMsg(thread) && <span className="haveUnreadMsg"></span>}</span>
-	          <span className="remove" onClick={this.handleClickRemove.bind(this, thread.uid)}>x</span>
-	        </li>
-	      )
-      })}
-    </ul>
-  }
-
   handleShowUserList() {
   	this.setState({showUserList: !this.state.showUserList});
-  }
-
-  userList() {
-  	return <div className="userList">
-  		<span className="showUserList" onClick={this.handleShowUserList.bind(this)}>{this.state.showUserList ? 'hide' : 'show users'}</span>
-  		{this.state.showUserList && 
-  			<ul className="chat-users-list">
-			    {this.state.users.filter(user => user.uid !== this.state.user_uid).map(user => (
-			      <li key={user.uid} onClick={this.handleClickTalk.bind(this, user)}>
-			      	<img src={user.url} alt='user img'/>
-			      	<p>
-			          <strong>{user.username}</strong> 
-			        </p>
-			      </li>
-			    ))}
-			  </ul>
-			}
-		</div>
   }
 
   handleKeyPress(event) {
@@ -396,7 +370,7 @@ class Chat extends Component {
 	  			if(matches[key].includes('.gif') || matches[key].includes('.png') || matches[key].includes('.jpg') || matches[key].includes('.jpeg'))
 	  				content = content.replace(matches[key], '<br/><br/><iframe width="300" height="200" src="' + matches[key] + '"></iframe><br/><br/>')
 	  			else
-	  				content = content.replace(matches[key], '<br/><br/><a target="_blank" href="' + matches[key] + '">' + matches[key] + '</a><br/><br/>')
+	  				content = content.replace(matches[key], '<a target="_blank" href="' + matches[key] + '">' + matches[key] + '</a>')
 	  	}
 	  }
 
@@ -409,12 +383,33 @@ class Chat extends Component {
 
   async handleChangeUpload(e) {
   	let file = e.target.files[0]
-  	let upload = await this.props.firebase.threadImg(this.state.thread.uid, file.name).put(file);
+  	await this.props.firebase.threadImg(this.state.thread.uid, file.name).put(file);
 
     this.props.firebase.threadImg(this.state.thread.uid, file.name).getDownloadURL()
     .then( url => {
     	this.setState({content: this.state.content + '[url]' + url + '[/url]'});
     });
+  }
+
+  handleChangeUsersThread(selectedOption) {
+  	this.setState({ selectedOption });
+  }
+
+  displayFormCreateThread() {
+  	this.setState({formCreateThreadIsOpen: true})
+  }
+
+  getOptions() {
+  	let options = [];
+  	for(let key in this.state.users) {
+  		if(this.state.users[key].uid !== this.state.user_uid)
+  			options.push({value: this.state.users[key].uid, label: this.state.users[key].username})
+  	}
+  	return options;
+  }
+
+  handleChangeThreadName(e) {
+  	this.setState({thread_name: e.target.value})
   }
 
   chatbox() {
@@ -452,63 +447,44 @@ class Chat extends Component {
     )
   }
 
-  handleChangeUsersThread(selectedOption) {
-  	this.setState({ selectedOption });
-  }
-
-  displayFormfCreateThread() {
-  	this.setState({formCreateThreadIsOpen: true})
-  }
-
-  getOptions() {
-  	let options = [];
-  	for(let key in this.state.users) {
-  		if(this.state.users[key].uid !== this.state.user_uid)
-  			options.push({value: this.state.users[key].uid, label: this.state.users[key].username})
-  	}
-  	return options;
-  }
-
-  handleChangeThreadName(e) {
-  	this.setState({thread_name: e.target.value})
-  }
-
-  formCreateThread() {
-  	const { selectedOption } = this.state;
-
-  	return <div className="form-thread">
-  		<input type='text' onChange={this.handleChangeThreadName.bind(this)} placeholder='Enter name thread' className="form-thread-input"/>
-  		<br/>
-  		<br/>
-		  <Select
-        value={selectedOption}
-        onChange={this.handleChangeUsersThread.bind(this)}
-        options={this.getOptions()}
-        isMulti={true}
-        className="form-thread-select"
-      />
-      <br/>
-		  <button onClick={this.createThread.bind(this)}>Create</button>
-  	</div>
-  }
-
   render() {
     const { loading, loadingUser } = this.state;
 
     return (
       <div className='webchat'>
         {loadingUser && <div>Loading Users...</div>}
-        {this.userList()}
+        <UserList 
+        	handleShowUserList={this.handleShowUserList.bind(this)} 
+        	showUserList={this.state.showUserList} 
+        	users={this.state.users} 
+        	handleClickUser={this.handleClickUser.bind(this)} 
+        	user_uid={this.state.user_uid}
+        />
         <div className="container">
 	      	<div className="box-left">
-	      		<span className="add-thread" title="add new chat" onClick={this.displayFormfCreateThread.bind(this)}>+</span>
+	      		<span className="add-thread" title="add new chat" onClick={this.displayFormCreateThread.bind(this)}>+</span>
 	      		{loading && <div>Loading Threats...</div>}
-			      {this.threadList()}
+			      <ThreadList 
+			      	threads={this.state.threads} 
+			      	thread={this.state.thread} 
+			      	handleClickThread={this.handleClickThread.bind(this)} 
+			      	getThreadName={this.getThreadName.bind(this)} 
+			      	haveUnreadMsg={this.haveUnreadMsg.bind(this)} 
+			      	handleClickRemove={this.handleClickRemove.bind(this)} 
+			      	getImgThread={this.getImgThread.bind(this)}
+			      />
 			    </div>
 			    {
 			    	this.state.formCreateThreadIsOpen &&
 			    	<div className="box-right">
-				    	{this.formCreateThread()}
+				    	<CreateThread 
+				    		handleChangeThreadName={this.handleChangeThreadName.bind(this)}
+				    		selectValue={this.state.selectedOption}
+				    		handleChangeUsersThread={this.handleChangeUsersThread.bind(this)}
+				    		getOptions={this.getOptions.bind(this)}
+				    		cancelCreateThread={this.cancelCreateThread.bind(this)}
+				    		createThread={this.createThread.bind(this)}
+				    	/>
 				    	{this.state.create_thread_error !== '' && <p>{this.state.create_thread_error}</p>}
 			      </div>
 		     	}
