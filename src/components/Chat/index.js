@@ -478,25 +478,23 @@ class Chat extends Component {
 			      	getImgThread={this.getImgThread.bind(this)}
 			      />
 			    </div>
-			    {
-			    	this.state.formCreateThreadIsOpen &&
-			    	<div className="box-right">
-				    	<CreateThread 
-				    		handleChangeThreadName={this.handleChangeThreadName.bind(this)}
-				    		selectValue={this.state.selectedOption}
-				    		handleChangeUsersThread={this.handleChangeUsersThread.bind(this)}
-				    		getOptions={this.getOptions.bind(this)}
-				    		cancelCreateThread={this.cancelCreateThread.bind(this)}
-				    		createThread={this.createThread.bind(this)}
-				    	/>
-				    	{this.state.create_thread_error !== '' && <p>{this.state.create_thread_error}</p>}
-			      </div>
-		     	}
-		     	{ (this.state.thread !== '' && !this.state.formCreateThreadIsOpen) &&
-		       <div className="box-right">
-		        	{this.chatbox()}
-		       </div>
-		      }
+			    <div className="box-right">
+				    {
+				    	this.state.formCreateThreadIsOpen &&
+				    	<React.Fragment>
+					    	<CreateThread 
+					    		handleChangeThreadName={this.handleChangeThreadName.bind(this)}
+					    		selectValue={this.state.selectedOption}
+					    		handleChangeUsersThread={this.handleChangeUsersThread.bind(this)}
+					    		getOptions={this.getOptions.bind(this)}
+					    		cancelCreateThread={this.cancelCreateThread.bind(this)}
+					    		createThread={this.createThread.bind(this)}
+					    	/>
+					    	{this.state.create_thread_error !== '' && <p>{this.state.create_thread_error}</p>}
+					    </React.Fragment>
+			     	}
+			     	{ (this.state.thread !== '' && !this.state.formCreateThreadIsOpen) && this.chatbox() }
+		    	</div>
 		    </div>
       </div>
     );

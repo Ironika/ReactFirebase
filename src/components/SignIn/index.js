@@ -5,10 +5,11 @@ import { PasswordForgetLink } from '../PasswordForget';
 import { SignUpLink } from '../SignUp';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import logoNissan from '../../assets/img/nissan-logo.png';
 
 const SignInPage = () => (
   <div className="signin">
-    <h1>SignIn</h1>
+    <img src={logoNissan} />
     <SignInForm />
     <PasswordForgetLink />
     <SignUpLink />

@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { withFirebase } from '../Firebase';
 import { compose } from 'recompose';
 import { SignInLink } from '../SignIn';
-
+import logoNissan from '../../assets/img/nissan-logo.png';
 
 import * as ROUTES from '../../constants/routes';
 
@@ -19,7 +19,7 @@ const INITIAL_STATE = {
 
 const SignUpPage = () => (
   <div className="signup">
-    <h1>SignUp</h1>
+    <img src={logoNissan} />
     <SignUpForm />
     <SignInLink />
   </div>

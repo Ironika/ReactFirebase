@@ -120,6 +120,10 @@ code {
 	color: white;
 }
 
+.logoSign {
+
+}
+
 /* ------------------------- NAVIGATION ------------------------- */
 
 .nav {
@@ -128,6 +132,7 @@ code {
     border-bottom: 1px #c3002f dashed;
     background-color: #c3002f;
     margin: 0;
+    padding-left: 50px;
 }
 
 .nav > li {
@@ -137,6 +142,13 @@ code {
 
 .nav > li > a {
 	color: white;
+}
+
+.logo {
+	width: 40px;
+	position: absolute;
+    top: 5px;
+    left: 10px;
 }
 
 /* ------------------------- ACCOUNT ------------------------- */
@@ -222,6 +234,10 @@ code {
 	color: white;
 }
 
+.thread-active .haveUnreadMsg {
+	 background-color: white;
+}
+
 .box-left > button {
 	padding: 10px;
 	margin: 20px;
@@ -300,6 +316,7 @@ code {
 
 .container {
 	display: flex;
+	border-top: 1px dashed #2f353a;
 }
 
 .box-left {
@@ -378,7 +395,7 @@ code {
 
 .chat-box > li > p {
 	background-color: #2f353a;
-	padding: 20px 30px;
+	padding: 20px 45px;
 	border-radius: 100px;
 	display: inline-block;
 	color: white;
@@ -471,6 +488,7 @@ footer {
     padding: 20px;
     color: #2f353a;
     text-align: right;
+    border-top: 1px dashed #2f353a;
 }
 
 @-moz-document url-prefix() {
