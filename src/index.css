@@ -1,3 +1,13 @@
+/*
+$dark-grey: #3c3c3c;
+$blue: #c5e0ff;
+*/
+
+/*
+$dark-grey: #2f353a;
+$red: #c3002f;
+*/
+
 body {
   margin: 0;
   padding: 0;
@@ -6,7 +16,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #3c3c3c;
+  background-color: white;
 }
 
 code {
@@ -20,6 +30,8 @@ code {
 	width: 20%;
 	text-align: center;
 	margin: 10% auto;
+	background-color: #c3002f;
+	padding: 20px;
 }
 
 .signin > h1, .signin > p {
@@ -27,7 +39,7 @@ code {
 }
 
 .signin > p > a {
-	color: #c5e0ff;
+	color: white;
 }
 
 .signin > form {
@@ -41,7 +53,8 @@ code {
 
 .signin > form > input {
 	padding: 10px;
-	width: 100%;
+	width: 92%;
+	margin: auto;
 }
 
 .signin > form > .cta {
@@ -51,8 +64,8 @@ code {
 .signin > form > .cta > button {
 	padding: 10px;
 	margin: 5px 0;
-	background-color: #c5e0ff;
-	color: black;
+	background-color: #2f353a;
+	color: white;
 	cursor: pointer;
 }
 
@@ -62,6 +75,8 @@ code {
 	width: 20%;
 	text-align: center;
 	margin: 10% auto;
+	background-color: #c3002f;
+	padding: 20px;
 }
 
 .signup > h1, .signup > p {
@@ -69,11 +84,12 @@ code {
 }
 
  .signup > p > a {
- 	color: #c5e0ff;
+ 	color: white;
  }
 
 .signup > form {
 	text-align: left;
+	width: 100%;
 }
 
 .signup > form > label {
@@ -83,7 +99,7 @@ code {
 
 .signup > form > input {
 	padding: 10px;
-	width: 100%;
+	width: 92%;
 }
 
 .signup > form > .cta {
@@ -93,23 +109,25 @@ code {
 .signup > form > .cta > button {
 	padding: 10px;
 	margin: 5px 0;
-	background-color: #c5e0ff;
-	color: black;
+	background-color: #2f353a;
+	color: white;
 	cursor: pointer;
 }
 
 .signout {
 	padding: 10px;
-	background-color: #c5e0ff;
+	background-color: #2f353a;
+	color: white;
 }
 
 /* ------------------------- NAVIGATION ------------------------- */
 
 .nav {
 	list-style-type: none;
-	padding: 20px;
-    padding-top: 0;
-    border-bottom: 1px #c5e0ff dashed;
+	padding: 10px 20px;
+    border-bottom: 1px #c3002f dashed;
+    background-color: #c3002f;
+    margin: 0;
 }
 
 .nav > li {
@@ -128,6 +146,8 @@ code {
 	text-align: center;
 	margin: 8% auto;
 	color: white;
+	background-color: #c3002f;
+	padding: 20px;
 }
 
 .account > img {
@@ -139,7 +159,8 @@ code {
 
 .account > button, .account > form > button  {
 	padding: 10px;
-	background-color: #c5e0ff;
+	background-color: #2f353a;
+	color: white;
 }
 
 .account > form > input {
@@ -156,7 +177,7 @@ code {
 	text-align: left;
 	margin-top: 15px;
 	overflow-y: scroll;
-    max-height: 355px;
+    height: 435px;
 }
 
 .thread-list > li {
@@ -197,28 +218,28 @@ code {
 }
 
 .thread-active {
-	background-color: #c5e0ff;
-	color: black;
+	background-color: #c3002f;
+	color: white;
 }
 
 .box-left > button {
 	padding: 10px;
 	margin: 20px;
-	background-color: #c5e0ff;
+	background-color: #c3002f;
 }
 
 .userList {
 	position: relative;
+	padding: 10px;
 }
 
 .showUserList {
-	color: white;
 	text-decoration: underline;
 	cursor: pointer;
 	position: absolute;
     right: 10px;
     text-transform: uppercase;
-    top: -10px;
+    top: 0px;
     font-size: 12px;
 }
 
@@ -227,7 +248,6 @@ code {
 	margin: 0;
 	overflow-x: scroll;
 	display: flex;
-	border-bottom: 1px dashed #c5e0ff;
 	padding-left: 0;
 }
 
@@ -239,27 +259,27 @@ code {
 
 .chat-users-list > li > p {
 	text-align: center;
-	color: white;
+	/*color: white;*/
 }
 
 .chat-users-list > li > img {
 	border-radius: 100px;
-	width: 80px;
-	height: 80px;
+	width: 60px;
+	height: 60px;
 	object-fit: cover;
 }
 
 .chat-users-list-chat {
-	list-style-type: none;
-	margin: 0;
-	overflow-x: scroll;
-	display: flex;
-	border-bottom: 1px dashed #c5e0ff;
-	padding-left: 0;
+    list-style-type: none;
+    margin: 0;
+    overflow-y: scroll;
+    padding-left: 0;
+    display: inline-block;
+    height: 435px;
 }
 
 .chat-users-list-chat > li {
-	display: inline-block;
+	/*display: inline-block;*/
 	margin: 0 10px;
 	padding: 10px;
 	cursor: pointer;
@@ -284,6 +304,7 @@ code {
 
 .box-left {
 	width: 15%;
+	background-color: #2f353a;
 }
 
 .add-thread {
@@ -291,14 +312,22 @@ code {
     left: 4%;
     top: 12px;
     padding: 3px 8px;
-    background-color: #c5e0ff;
+    background-color: #c3002f;
     font-size: 20px;
     border-radius: 100px;
     cursor: pointer;
+    color: white;
 }
 
 .form-thread {
 	width: 50%;
+}
+
+.form-thread > button {
+	color: white;
+	width: 30%;
+	text-transform: uppercase;
+	cursor: pointer;
 }
 
 .form-thread-input {
@@ -313,39 +342,46 @@ code {
 .box-right {
 	width: 85%;
 	padding: 20px;
-	border-left: 1px dashed #c5e0ff;
+	background-color: #2f353a;
+	display: flex;
 }
 
 .box-right > div > button {
 	padding: 10px;
-	background-color: #c5e0ff;
+	background-color: #c3002f;
 }
 
 .box-right-container {
 	overflow: hidden;
 	position: relative;
+	width: 100%;
+}
+
+.box-right-container-list {
+	width: 95%;
+    display: inline-block;
 }
 
 .chat-box {
     padding: 20px;
     margin: 0;
     width: calc(100% - 40px);
-    height: 340px;
+    height: 375px;
     overflow-y: scroll;
     list-style-type: none;
-    background-color: #c5e0ff;
+    background-color: white;
 }
 
 .chat-box-full {
-	height: 490px !important;
+	height: 505px !important;
 }
 
 .chat-box > li > p {
-	background-color: white;
-	padding: 20px 45px;
+	background-color: #2f353a;
+	padding: 20px 30px;
 	border-radius: 100px;
 	display: inline-block;
-	color: black;
+	color: white;
 	margin: 5px;
 	white-space: pre-line;
 }
@@ -374,11 +410,11 @@ code {
 }
 
 .sender a {
-	color: #c5e0ff;
+	color: white;
 }
 
 .sender > p {
-	background-color: #3c3c3c !important;
+	background-color: #c3002f !important;
 	color: white !important;
 	display: inline-block;
 }
@@ -393,19 +429,20 @@ textarea {
     resize: none;
     outline: none;
     padding-right: 70px;
+    border-top: 1px solid black;
 }
 
 .send-msg {
     width: 10%;
-    height: 65px;
-    background-color: #c5e0ff;
+    height: 66px;
+    background-color: #c3002f;
     text-align: center;
     text-transform: uppercase;
     display: inline-block;
     border: none;
-    border-top: 1px solid white;
     outline: none;
     cursor: pointer;
+    border-top: 1px solid black;
 }
 
 .send-msg > img {
@@ -431,18 +468,19 @@ textarea {
 
 footer {
 	clear: both;
-    border-top: 1px #c5e0ff dashed;
     padding: 20px;
-    color: white;
+    color: #2f353a;
     text-align: right;
 }
 
 @-moz-document url-prefix() {
     textarea {
     	height: 24px;
+    	border: none;
     }
     .send-msg {
     	border-top: 1px solid black !important;
+    	height: 65px;
     }
 }
 
@@ -454,7 +492,6 @@ footer {
 	.box-right {
 		width: 100%;
 		padding: 0;
-		border-top: 1px dashed #c5e0ff;
 		border-left: none;
 	}
 

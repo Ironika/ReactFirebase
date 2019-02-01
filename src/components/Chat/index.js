@@ -337,9 +337,11 @@ class Chat extends Component {
   }
 
   handleScrollChat(e) {
-  	if(this.haveUnreadMsg(this.state.thread))
-	  	if(e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 380) || e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 530))
+  	if(this.haveUnreadMsg(this.state.thread)) {
+  		console.log(e.currentTarget.scrollTop, e.currentTarget.scrollHeight)
+	  	if(e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 415) || e.currentTarget.scrollTop === (e.currentTarget.scrollHeight - 545))
 	  		this.msgIsRead(this.state.thread);
+  	}
   }
 
   handleEmojiClick(code, emoji) {
@@ -415,7 +417,25 @@ class Chat extends Component {
   chatbox() {
   	return (
       <React.Fragment>
-      	{this.state.thread.users.length > 2 && 
+      	<div className={this.state.thread.users.length > 2 ? "box-right-container box-right-container-list" : "box-right-container" }>
+	        <ul className={this.state.showUserList ? "chat-box" : "chat-box chat-box-full"} id="chat" onScroll={this.handleScrollChat.bind(this)}>
+	          {this.state.thread.messages && this.state.thread.messages.map((message, index) => {
+	          	let date = new Date(message.sended_at);
+	            return message.user.uid === this.state.user_uid ? 
+	            <li className="sender" key={index}><p><span>{date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}</span><br/><br/><span dangerouslySetInnerHTML={{__html: this.parseUrl(message.content)}}></span></p></li> : 
+	            <li key={index}><p><span>{this.state.thread.users.length < 3 ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' - ' + message.user.username}</span><br/><br/><span dangerouslySetInnerHTML={{__html: this.parseUrl(message.content)}}></span></p></li>
+	          })}
+	        </ul>
+	        <div className="send-block">
+		        <textarea placeholder="Type your text ..." value={this.state.content} onChange={this.change.bind(this, 'content')} onKeyPress={this.handleKeyPress.bind(this)}></textarea>
+		        <span className="showEmojis" onClick={this.showEmojis.bind(this)}>{'😎'}</span>
+		        <img className="uploadFileIcon" onClick={this.handleClickUpload.bind(this)} src={iconUpload} alt='icon upload'/>
+		        <input type='file' hidden id='upload' ref="fileUploader" onChange={this.handleChangeUpload.bind(this)}/>
+		        {this.state.showEmojis && <EmojiPicker onEmojiClick={this.handleEmojiClick.bind(this)}/>}
+		        <button className="send-msg" onClick={this.sendMsg.bind(this)}><img src={iconSend} alt='icon send'/></button>
+		      </div>
+				</div>
+				{this.state.thread.users.length > 2 && 
       		<ul className="chat-users-list-chat">
 				    {this.state.thread.users.filter(user => user.uid !== this.state.user_uid).map(user => (
 				      <li key={user.uid}>
@@ -427,22 +447,6 @@ class Chat extends Component {
 				    ))}
 				  </ul>
 				}
-        <ul className={this.state.showUserList ? "chat-box" : "chat-box chat-box-full"} id="chat" onScroll={this.handleScrollChat.bind(this)}>
-          {this.state.thread.messages && this.state.thread.messages.map((message, index) => {
-          	let date = new Date(message.sended_at);
-            return message.user.uid === this.state.user_uid ? 
-            <li className="sender" key={index}><p><span>{date.toLocaleDateString() + ' ' + date.toLocaleTimeString()}</span><br/><br/><span dangerouslySetInnerHTML={{__html: this.parseUrl(message.content)}}></span></p></li> : 
-            <li key={index}><p><span>{this.state.thread.users.length < 3 ? date.toLocaleDateString() + ' ' + date.toLocaleTimeString() : date.toLocaleDateString() + ' ' + date.toLocaleTimeString() + ' - ' + message.user.username}</span><br/><br/><span dangerouslySetInnerHTML={{__html: this.parseUrl(message.content)}}></span></p></li>
-          })}
-        </ul>
-        <div className="send-block">
-	        <textarea placeholder="Type your text ..." value={this.state.content} onChange={this.change.bind(this, 'content')} onKeyPress={this.handleKeyPress.bind(this)}></textarea>
-	        <span className="showEmojis" onClick={this.showEmojis.bind(this)}>{'😎'}</span>
-	        <img className="uploadFileIcon" onClick={this.handleClickUpload.bind(this)} src={iconUpload} alt='icon upload'/>
-	        <input type='file' hidden id='upload' ref="fileUploader" onChange={this.handleChangeUpload.bind(this)}/>
-	        {this.state.showEmojis && <EmojiPicker onEmojiClick={this.handleEmojiClick.bind(this)}/>}
-	        <button className="send-msg" onClick={this.sendMsg.bind(this)}><img src={iconSend} alt='icon send'/></button>
-	      </div>
       </React.Fragment>
     )
   }
@@ -490,9 +494,7 @@ class Chat extends Component {
 		     	}
 		     	{ (this.state.thread !== '' && !this.state.formCreateThreadIsOpen) &&
 		       <div className="box-right">
-		       	<div className="box-right-container">
 		        	{this.chatbox()}
-		        </div>
 		       </div>
 		      }
 		    </div>

@@ -13,9 +13,9 @@ const CreateThread = (props) => (
 	        isMulti={true}
 	        className="form-thread-select"
 	    />
-      <br/>
-      <button onClick={props.cancelCreateThread} style={{marginRight: '10px'}}>Cancel</button>
-		  <button onClick={props.createThread}>Create</button>
+      	<br/>
+      	<button onClick={props.cancelCreateThread} style={{marginRight: '10px'}}>Cancel</button>
+		<button onClick={props.createThread}>Create</button>
   	</div>
 );
 
