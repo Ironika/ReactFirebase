@@ -1,8 +1,16 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+hosted on https://mychat-98176.web.app/chat
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+
+then,
 
 ### `npm start`
 
